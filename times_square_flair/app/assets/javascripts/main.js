@@ -7,30 +7,38 @@ $( document ).ready(function() {
 handler = Gmaps.build('Google');
 handler.buildMap({
     provider: {
-      disableDefaultUI: true
+      disableDefaultUI: true,
       // pass in other Google Maps API options here
+      center: {lat: 40.758899, lng: -73.987325},
+      zoom: 17,
+      zoomControl: true,
+      mapTypeControl: true,
+      scaleControl: true,
+      streetViewControl: true,
+      rotateControl: true
     },
     internal: {
       id: 'one_marker'
     }
-  },
-  function(){
-    console.log('Adding markers');
-    markers = handler.addMarkers([
-      {
-        "lat": 0,
-        "lng": 0,
-        "picture": {
-          "url": "http://people.mozilla.com/~faaborg/files/shiretoko/firefoxIcon/firefox-32.png",
-          "width":  32,
-          "height": 32
-        },
-        "infowindow": "hello!"
-      }
-    ]);
-    handler.bounds.extendWith(markers);
-    handler.fitMapToBounds();
   }
+  // },
+  // function(){
+  //   console.log('Adding markers');
+  //   markers = handler.addMarkers([
+  //     {
+  //       "lat": 40.712784,
+  //       "lng": -74.005941,
+  //       "picture": {
+  //         "url": "http://people.mozilla.com/~faaborg/files/shiretoko/firefoxIcon/firefox-32.png",
+  //         "width":  32,
+  //         "height": 32
+  //       },
+  //       "infowindow": "hello!"
+  //     }
+  //   ]);
+  //   handler.bounds.extendWith(markers);
+  //   handler.fitMapToBounds();
+  // }
 );
 
 //End of code taken from Google Maps for Rails
