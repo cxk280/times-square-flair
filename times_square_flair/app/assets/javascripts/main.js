@@ -1,5 +1,39 @@
+
+
 $( document ).ready(function() {
   console.log( "ready!" );
+
+//Relevant Google Maps code from here: https://github.com/apneadiving/Google-Maps-for-Rails
+handler = Gmaps.build('Google');
+handler.buildMap({
+    provider: {
+      disableDefaultUI: true
+      // pass in other Google Maps API options here
+    },
+    internal: {
+      id: 'one_marker'
+    }
+  },
+  function(){
+    console.log('Adding markers');
+    markers = handler.addMarkers([
+      {
+        "lat": 0,
+        "lng": 0,
+        "picture": {
+          "url": "http://people.mozilla.com/~faaborg/files/shiretoko/firefoxIcon/firefox-32.png",
+          "width":  32,
+          "height": 32
+        },
+        "infowindow": "hello!"
+      }
+    ]);
+    handler.bounds.extendWith(markers);
+    handler.fitMapToBounds();
+  }
+);
+
+//End of code taken from Google Maps for Rails
 
 
 function listSigns(myData){
