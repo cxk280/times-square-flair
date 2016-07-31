@@ -6,8 +6,6 @@ let mySqFootage;
 let myAddress;
 
 
-
-
 function listSigns(myData){
   console.log('listSigns running!');
   for (i in myData) {
@@ -27,13 +25,11 @@ function listSigns(myData){
             console.log('myName is: ' + myName);
             console.log('mySqFootage is: ' + mySqFootage);
             console.log('myAddress is: ' + myAddress);
+            geocodeAddress();
           })
           .appendTo($('#button-number-div' + i));
   };
-  createMap();
 }
-
-
 
 
 function getSign () {
@@ -48,40 +44,46 @@ function getSign () {
     })
   };
 
-
+function geocodeAddress(){
+  $.ajax({
+      url: 'https://maps.googleapis.com/maps/api/geocode/json',
+      method: 'GET',
+      data: {'address': myAddress + ', New York, NY', key : ENV["GOOGLE_API_KEY"]},
+      dataType: 'json',
+      success: function (data){
+        console.log('Successfully geocoded address!');
+        $('#add-db-button').remove();
+        $('#view-db-button').remove();
+        createMap(data.results[0].geometry.location.lat,data.results[0].geometry.location.lng);
+      }
+    })
+};
 
 //Streetview button on click inside a function called in the getSign success function
-function createMap(name, sqfootage, address){
+function createMap(mylat, mylng){
     $('<button/>').attr('id','add-db-button').text('Add to my list').on('click', function(){
-      // $('<form/>').attr('id', 'db-form').appendTo('#add-db-button');
-
-
-
       console.log('Add DB button clicked!');
       // Help with this Ajax posting from here: http://stackoverflow.com/questions/17559563/sending-ajax-post-jquery-in-rails-application
       $.ajax({
         url: '/signs',
         method: 'POST',
         data: {'name' : myName, 'square-footage': mySqFootage, 'address': myAddress},
-        // data: {'name' : myName},
         dataType: 'json',
         success: function (data){
           console.log('Successfully added to DB!');
         }
       })
-
-
-
-
-
-
-        // $('<input>').attr('name', 'name').val(myName).appendTo('#db-form');
-        // $('<input>').attr('name', 'square-footage').val(mySqFootage).appendTo('#db-form');
-        // $('<input>').attr('name', 'address').val(myAddress).appendTo('#db-form');
-        // $('<input>').attr('type', 'submit').val('SUBMIT');
-        // console.log($('#db-form').val())
     })
     .appendTo('#button-div');
+
+    // Help with the see DB button from here: http://stackoverflow.com/questions/2238368/how-to-make-a-button-redirect-to-another-page-using-jquery-or-just-javascript
+    $('<button/>').attr('id','view-db-button').text('See my list').on('click', function(){
+      window.location = '/signs'
+    }).appendTo('#button-div');
+
+    $('#my-street-image').attr('src', '');
+    let streetviewURL = 'https://maps.googleapis.com/maps/api/streetview?location=' + mylat + ',' + mylng + '&key=' + ENV["GOOGLE_API_KEY"] + '&size=400x400';
+    $('#my-street-image').attr('src', streetviewURL);
 
     //Relevant Google Maps code from here: https://github.com/apneadiving/Google-Maps-for-Rails
     handler = Gmaps.build('Google');
@@ -89,8 +91,8 @@ function createMap(name, sqfootage, address){
         provider: {
           disableDefaultUI: true,
           // pass in other Google Maps API options here
-          center: {lat: 40.758899, lng: -73.987325},
-          zoom: 17,
+          center: {lat: mylat, lng: mylng},
+          zoom: 15,
           zoomControl: true,
           mapTypeControl: true,
           scaleControl: true,
@@ -100,25 +102,16 @@ function createMap(name, sqfootage, address){
         internal: {
           id: 'one_marker'
         }
+      },
+      function(){
+        console.log('Adding markers');
+        markers = handler.addMarkers([
+          {
+            "lat": mylat,
+            "lng": mylng
+          }
+        ]);
       }
-      // },
-      // function(){
-      //   console.log('Adding markers');
-      //   markers = handler.addMarkers([
-      //     {
-      //       "lat": 40.712784,
-      //       "lng": -74.005941,
-      //       "picture": {
-      //         "url": "http://people.mozilla.com/~faaborg/files/shiretoko/firefoxIcon/firefox-32.png",
-      //         "width":  32,
-      //         "height": 32
-      //       },
-      //       "infowindow": "hello!"
-      //     }
-      //   ]);
-      //   handler.bounds.extendWith(markers);
-      //   handler.fitMapToBounds();
-      // }
     );
 
     //End of code taken from Google Maps for Rails
