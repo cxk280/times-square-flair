@@ -52,15 +52,36 @@ function getSign () {
 
 //Streetview button on click inside a function called in the getSign success function
 function createMap(name, sqfootage, address){
-    $('<button/>').attr('id','add-db-button').text('Add to my list').appendTo('#button-div');
-    $('#add-db-button').on('click', function(){
-      //function to add to db here
-      $('<form/>').attr('id', 'db-form').appendTo('#add-db-button');
+    $('<button/>').attr('id','add-db-button').text('Add to my list').on('click', function(){
+      // $('<form/>').attr('id', 'db-form').appendTo('#add-db-button');
+
+
+
       console.log('Add DB button clicked!');
-      // $('<input>').attr('name', '').appendTo('#db-form');
-      // $('<input>').attr('sqfootage', '').appendTo('#db-form');
-      // $('<input>').attr('address', '').appendTo('#db-form');
-    });
+      // Help with this Ajax posting from here: http://stackoverflow.com/questions/17559563/sending-ajax-post-jquery-in-rails-application
+      $.ajax({
+        url: '/signs',
+        method: 'POST',
+        data: {'name' : myName, 'square-footage': mySqFootage, 'address': myAddress},
+        // data: {'name' : myName},
+        dataType: 'json',
+        success: function (data){
+          console.log('Successfully added to DB!');
+        }
+      })
+
+
+
+
+
+
+        // $('<input>').attr('name', 'name').val(myName).appendTo('#db-form');
+        // $('<input>').attr('name', 'square-footage').val(mySqFootage).appendTo('#db-form');
+        // $('<input>').attr('name', 'address').val(myAddress).appendTo('#db-form');
+        // $('<input>').attr('type', 'submit').val('SUBMIT');
+        // console.log($('#db-form').val())
+    })
+    .appendTo('#button-div');
 
     //Relevant Google Maps code from here: https://github.com/apneadiving/Google-Maps-for-Rails
     handler = Gmaps.build('Google');
