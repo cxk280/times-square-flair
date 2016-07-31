@@ -41,7 +41,10 @@ function getSign () {
 //Streetview button on click inside a function called in the getSign success function
 function createMap(){
   $('.streetview-button').on("click", function() {
-    $('<button/>').text('Add to my list').appendTo('#button-div');
+    $('<button/>').attr('id','add-db-button').text('Add to my list').appendTo('#button-div');
+    $('#add-db-button').on('click', function(){
+      //function to add to db here
+    });
 
     //Relevant Google Maps code from here: https://github.com/apneadiving/Google-Maps-for-Rails
     handler = Gmaps.build('Google');
