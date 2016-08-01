@@ -39,7 +39,7 @@ $( document ).ready(function() {
         $('<div/>').addClass("three columns").attr("id", "address-number-div" + i).appendTo($('#row-number-' + i));
           $('<p/>').text(myData[i].building_address).val(myData[i].building_address).attr("id", "address-number-p" + i).appendTo($('#address-number-div' + i));
         $('<div/>').addClass("three columns").attr("id", "button-number-div" + i).appendTo($('#row-number-' + i));
-          $('<button/>').addClass("streetview-button").attr('id', 'streetview-button-' + i).attr('name', myData[i].screen_name_led_vinyl_signs_).attr('square-footage', myData[i].sf).attr('address',myData[i].building_address).text('Streetview')
+          $('<button/>').addClass("streetview-button button-primary").attr('id', 'streetview-button-' + i).attr('name', myData[i].screen_name_led_vinyl_signs_).attr('square-footage', myData[i].sf).attr('address',myData[i].building_address).text('Streetview')
             .on('click', function(){
               myName      = $(this).attr('name');
               mySqFootage = $(this).attr('square-footage');
@@ -64,6 +64,10 @@ $( document ).ready(function() {
           console.log('Successfully geocoded address!');
           $('#add-db-button').remove();
           $('#view-db-button').remove();
+          $('#delete-db-button').remove();
+          $('#br1').remove();
+          $('#br2').remove();
+          $('#br3').remove();
           createMap(data.results[0].geometry.location.lat,data.results[0].geometry.location.lng);
         }
       })
@@ -71,7 +75,7 @@ $( document ).ready(function() {
 
   //Streetview button on click inside a function called in the getSign success function
   function createMap(mylat, mylng){
-      $('<button/>').attr('id','add-db-button').text('Add to my list').on('click', function(){
+      $('<button/>').addClass('button-primary').attr('id','add-db-button').text('Add to my list').on('click', function(){
         console.log('Add DB button clicked!');
         // Help with this Ajax posting from here: http://stackoverflow.com/questions/17559563/sending-ajax-post-jquery-in-rails-application
         $.ajax({
@@ -86,15 +90,20 @@ $( document ).ready(function() {
       })
       .appendTo('#button-div');
 
+      $('<br>').attr('id', 'br1').appendTo('#button-div');
+
       // Help with the see DB button from here: http://stackoverflow.com/questions/2238368/how-to-make-a-button-redirect-to-another-page-using-jquery-or-just-javascript
       $('<button/>').attr('id','view-db-button').text('See my list').on('click', function(){
         window.location = '/signs'
       }).appendTo('#button-div');
 
+      $('<br>').attr('id', 'br2').appendTo('#button-div');
+
       $('<button/>').attr('id','delete-db-button').text('Delete my whole list').on('click', function(){
         deleteMyDB()
       }).appendTo('#button-div');
 
+      $('<br>').attr('id', 'br3').appendTo('#button-div');
 
       $('#my-street-image').attr('src', '');
       let streetviewURL = 'https://maps.googleapis.com/maps/api/streetview?location=' + mylat + ',' + mylng + '&key=' + googleKey + '&size=400x400';

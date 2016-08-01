@@ -3,11 +3,13 @@
 // You can use Sass (SCSS) here: http://sass-lang.com/
 
 body {
-  text-align: center
+  text-align: center;
+  background-color: #d3d3d3;
 }
 
 #my-title {
-  text-align: center
+  text-align: center;
+  font-family: didot;
 }
 
 #sign-name {
@@ -24,4 +26,9 @@ body {
 
 #sign-button {
   text-decoration: underline
+}
+
+p {
+  color: #2a2a2a;
+  font-family: helvetica;
 }
