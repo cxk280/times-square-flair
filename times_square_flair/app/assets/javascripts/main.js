@@ -24,8 +24,6 @@ $( document ).ready(function() {
       url: 'https://data.cityofnewyork.us/resource/wy54-4228.json',
       method: 'GET',
       success: function(data){
-          console.log('Retrieved signs')
-          // console.log(data[0].sf)
           listSigns(data);
         }
       });
@@ -93,6 +91,11 @@ $( document ).ready(function() {
         window.location = '/signs'
       }).appendTo('#button-div');
 
+      $('<button/>').attr('id','delete-db-button').text('Delete my whole list').on('click', function(){
+        deleteMyDB()
+      }).appendTo('#button-div');
+
+
       $('#my-street-image').attr('src', '');
       let streetviewURL = 'https://maps.googleapis.com/maps/api/streetview?location=' + mylat + ',' + mylng + '&key=' + googleKey + '&size=400x400';
       $('#my-street-image').attr('src', streetviewURL);
@@ -127,6 +130,30 @@ $( document ).ready(function() {
 
       //End of code taken from Google Maps for Rails
     };
+
+  function deleteMyDB(){
+    console.log('deleteMyDB running');
+    $.ajax({
+      url: '/signs',
+      method: 'get',
+      success: function(data){
+        let deleteArr = [];
+        for (i in data){
+          deleteArr.push(i);
+        };
+        for (j = 1; j <= deleteArr.length; j++){
+          $.ajax({
+            url: '/signs/' + (j),
+            method: 'DELETE',
+            success: function(response){
+              console.log ('Deleted item' + j)
+            }
+          });
+        };
+      console.log('Deleted DB contents');
+      }
+    });
+  }
 
   getEnv();
 

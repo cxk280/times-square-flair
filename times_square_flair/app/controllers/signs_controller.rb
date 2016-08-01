@@ -15,9 +15,9 @@ class SignsController < ApplicationController
     render :json => Sign.last
   end
 
-  def edit
-    render :json => Sign.find(params[:id])
-  end
+  # def edit
+  #   render :json => Sign.find(params[:id])
+  # end
 
   # def update
   #   my_sign = {name: params[:name], square-footage: params[:square-footage].to_i, address: params[:address]}
@@ -28,7 +28,6 @@ class SignsController < ApplicationController
   def destroy
     my_sign = Sign.find(params[:id])
     my_sign.destroy
-    render :json => true
   end
 
 end
