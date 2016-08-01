@@ -6,5 +6,6 @@ Rails.application.routes.draw do
 
   resources :signs
 
+  get '/key', to: 'keys#get_key'
   # For details on the DSL available within this file, see http://guides.rubyonrails.org/routing.html
 end
